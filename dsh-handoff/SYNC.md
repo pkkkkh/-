@@ -10,14 +10,20 @@
 
 ## 改代码的标准流程
 
+pnpm 不在系统 PATH 里，用 DSH 自带的这个（11.28.5）：
+
 ```powershell
+$node = "C:\Users\kh006\.dsh\dsh-runtimes\dsh-primary-runtime\dependencies\node\bin\node.exe"
+$pnpm = "C:\Users\kh006\.dsh\dsh-runtimes\dsh-primary-runtime\dependencies\pnpm\bin\pnpm.mjs"
 cd C:\Users\kh006\.dsh\im\apps\dsh-bilibili\dsh-handoff
 
-pnpm install          # 首次，或 package.json 变了
-pnpm build            # tsdown：src/*.ts → lib/index.js + lib/client.js
-pnpm test             # vitest，13 个测试文件
-pnpm typecheck        # 可选，改类型时跑
+& $node $pnpm install      # 首次，或 package.json 变了
+& $node $pnpm build        # tsdown：src/*.ts → lib/index.js + lib/client.js
+& $node $pnpm test         # vitest，13 个测试文件
+& $node $pnpm typecheck    # 可选，改类型时跑
 ```
+
+> 工作区目前**还没装依赖**（没有 `node_modules`），第一次要先跑 `install`。
 
 ## 同步到运行时
 

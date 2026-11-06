@@ -1,0 +1,73 @@
+# dsh-bilibili bundle patch — one insert row over the profile tree.
+# Defaults live here; override any field in profiles/web/cordis.patch.yml
+# (e.g. sessdata, commentLimit) — later layers win per row.
+- insert:
+    - id: bilibili
+      name: 'dsh-bilibili'
+      config:
+        # B站登录凭证（可选，提升评论/字幕获取成功率），留空则匿名
+        sessdata: ''
+        # 评论抓取数量上限
+        commentLimit: 20
+        # 字幕驱动关键帧最大数量
+        maxFrames: 6
+        # 是否抓取关键帧（关闭后只提取文字信息）
+        extractFrames: true
+        # 抓帧时是否先把视频下载到本地（推荐；失败自动回退远程逐帧）
+        downloadVideo: true
+        # 是否保留下载的视频文件（默认抓完即删）
+        keepVideo: false
+        # 视频时长超过该分钟数时不下载，改为远程逐帧提取
+        maxVideoMinutes: 30
+        # 下载大小上限（MB）
+        maxDownloadMb: 800
+        # 下载清晰度（16=360p, 32=480p, 64=720p, 80=1080p）
+        quality: 32
+        # 是否启用画面场景切换检测（候选时间点的主信号；>20 分钟视频自动跳过）
+        detectScenes: true
+        # 场景切换检测阈值（0-1，越大越严格）
+        sceneThreshold: 0.4
+        # 清晰帧优选：目标时间点 ±1.5s 内用 blurdetect 选最清晰的帧（避开动画入场/运动模糊）
+        sharpFrames: true
+        # 无字幕轨时的 ASR 转写引擎：bcut(必剪,默认) | sherpa-onnx(中文推荐) | whisper-local | auto(必剪→sherpa→whisper) | none
+        asrProvider: 'bcut'
+        # whisper.cpp 可执行文件（在 PATH 里或填绝对路径）；仅 asrProvider=whisper-local/auto 时用到
+        whisperBin: 'whisper-cli'
+        # whisper 模型三档：small(低配) / medium(中配) / large-v3(高配)；也可填 ggml-*.bin 完整路径（模型需自行下载）
+        whisperModel: 'medium'
+        # whisper 模型目录（whisperModel 为档位名时生效）；留空 = <whisperBin 同目录>/models
+        whisperModelDir: ''
+        # 转写语言
+        whisperLanguage: 'zh'
+        # CPU 线程数（0 = 自动）
+        whisperThreads: 0
+        # sherpa-onnx-offline 可执行文件路径（中文推荐）；留空表示未安装
+        sherpaBin: ''
+        # sherpa 模型 onnx 文件路径（SenseVoice/Paraformer，需自行下载）
+        sherpaModel: ''
+        # sherpa 模型类型：sense-voice | paraformer | zipformer2-ctc（决定命令行 flag）
+        sherpaModelType: 'sense-voice'
+        # sherpa tokens.txt 路径
+        sherpaTokens: ''
+        # sherpa CPU 线程数（0 = 自动）
+        sherpaThreads: 0
+        # 帧图视觉描述引擎：none(默认,关闭) | ollama(本地) | llama-cpp(本地) | openai-compatible(云端)；开启后每帧自动附画面文字描述
+        visionProvider: 'none'
+        # 视觉服务地址：留空且 ollama = http://localhost:11434/v1；云端填厂商 OpenAI 兼容地址
+        visionBaseUrl: ''
+        # 视觉模型三档：low(qwen3-vl:2b) / medium(qwen3-vl:4b,默认) / high(qwen3-vl:8b)；或显式模型名（如 minicpm-v、gpt-4o-mini）
+        visionModel: 'medium'
+        # 云端视觉服务的 API Key（本地 Ollama 留空）
+        visionApiKey: ''
+        # 识图提示词（留空 = 按模型自动选内置提示词）
+        visionPrompt: ''
+        # 分模型提示词覆盖（可选，如 { 'qwen3-vl:2b': '自定义...', 'minicpm-v': '自定义...' }）；按 显式模型名 > 档位名(low/medium) > 全局 visionPrompt 的优先级生效
+        visionPromptByModel: {}
+        # 最多描述几张帧（1-20，默认 6，与 maxFrames 对齐；CPU 上注意延迟）
+        visionMaxFrames: 6
+        # 帧图片输出目录（留空 = 系统临时目录下 dsh-bilibili/<bvid>）
+        framesDir: ''
+        # 输出模板文件路径（留空 = 内置 templates/summary.md；可指向自己的模板）
+        summaryTemplate: ''
+        # 工具整体超时（毫秒）
+        timeoutMs: 300000

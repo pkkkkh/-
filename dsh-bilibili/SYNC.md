@@ -4,7 +4,7 @@
 
 ```
 运行时：C:\Users\kh006\.dsh\profiles\desktop\node_modules\dsh-bilibili\lib
-源码：  C:\Users\kh006\.dsh\im\apps\dsh-bilibili\lib
+源码：  C:\Users\kh006\.dsh\im\apps\dsh-bilibili\dsh-bilibili\lib
 ```
 
 两份文件里，`envcheck.js` / `login.js` / `index.js` 是硬链接（改一份等于改两份）；
@@ -14,7 +14,7 @@
 ## 同步
 
 ```powershell
-$src = "C:\Users\kh006\.dsh\im\apps\dsh-bilibili\lib"
+$src = "C:\Users\kh006\.dsh\im\apps\dsh-bilibili\dsh-bilibili\lib"
 $dst = "C:\Users\kh006\.dsh\profiles\desktop\node_modules\dsh-bilibili\lib"
 Copy-Item "$src\digest.js","$src\channel.js","$src\format.js","$src\ads.js","$src\keyframes.js","$src\extractor.js" $dst -Force
 ```
@@ -36,7 +36,7 @@ Copy-Item "$src\digest.js","$src\channel.js","$src\format.js","$src\ads.js","$sr
 
 ```powershell
 $P = "C:\Users\kh006\.dsh\profiles\desktop\node_modules\dsh-bilibili"
-Copy-Item "C:\Users\kh006\.dsh\im\apps\dsh-bilibili\test" "$P\test" -Recurse -Force
+Copy-Item "C:\Users\kh006\.dsh\im\apps\dsh-bilibili\dsh-bilibili\test" "$P\test" -Recurse -Force
 & "D:\DSH\resources\runtime\primary-runtime\dependencies\node\bin\node.exe" --test --test-reporter=dot   # 在 $P 下执行
 Remove-Item "$P\test" -Recurse -Force
 ```
